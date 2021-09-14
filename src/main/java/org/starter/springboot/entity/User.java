@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -15,9 +16,12 @@ public class User {
     @Id
     private String id;
 
+    @Indexed(unique = true)
     private String email;
 
     private String firstName;
 
     private String lastName;
+
+    private Integer age;
 }

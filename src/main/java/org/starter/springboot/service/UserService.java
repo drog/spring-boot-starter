@@ -1,5 +1,6 @@
 package org.starter.springboot.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.starter.springboot.dto.entity.UserDto;
 import org.starter.springboot.entity.User;
@@ -8,6 +9,7 @@ import org.starter.springboot.repository.UserRepository;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -23,11 +25,13 @@ public class UserService {
             user = new User()
                     .setEmail(userDto.getEmail())
                     .setFirstName(userDto.getFirstName())
-                    .setLastName(userDto.getLastName());
+                    .setLastName(userDto.getLastName())
+                    .setAge(userDto.getAge());
 
             return userRepository.save(user);
         }
-        throw new UserException("duplicated");
+        log.warn("user duplicated");
+        throw new UserException("user duplicated");
     }
 
     public User updateUser(UserDto userDto) {
@@ -38,6 +42,7 @@ public class UserService {
                     .setLastName(userDto.getLastName());
             return userRepository.save(user);
         }
+        log.warn("user notFound");
         throw new UserException("notFound");
     }
 
@@ -48,6 +53,7 @@ public class UserService {
     public User findUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
+            log.warn("user notFound");
             throw new UserException("notFound");
         }
         return user;
@@ -56,13 +62,9 @@ public class UserService {
     public void deleteUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
+            log.warn("user notFound");
             throw new UserException("notFound");
         }
         userRepository.delete(user);
     }
-
-
-
-
-
 }
