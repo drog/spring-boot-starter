@@ -13,9 +13,7 @@ Starter project with spring boot
 - start local mongodb instance with `docker-compose up`
 
 # TODO
-- redis example
-- unit test
-
+- functional test
 
 # External links
 - Monster Mock https://github.com/jmartin82/mmock

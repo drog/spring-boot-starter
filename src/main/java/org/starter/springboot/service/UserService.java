@@ -3,9 +3,10 @@ package org.starter.springboot.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.starter.springboot.dto.response.UserDto;
-import org.starter.springboot.dto.request.UserRequest;
 import org.starter.springboot.dto.external.MatrixIdentityDto;
+import org.starter.springboot.dto.request.UserRequest;
+import org.starter.springboot.dto.response.UserDto;
+import org.starter.springboot.entity.TokenMatrix;
 import org.starter.springboot.entity.User;
 import org.starter.springboot.exception.UserException;
 import org.starter.springboot.mapper.UserMapper;
@@ -23,10 +24,14 @@ public class UserService {
 
     private final RestTemplateService restTemplateService;
 
+    private final TokenMatrixService tokenMatrixService;
+
     public UserService(UserRepository userRepository,
-                       RestTemplateService restTemplateService) {
+                       RestTemplateService restTemplateService,
+                       TokenMatrixService tokenMatrixService) {
         this.userRepository = userRepository;
         this.restTemplateService = restTemplateService;
+        this.tokenMatrixService = tokenMatrixService;
     }
 
     public UserDto createUser(UserRequest userRequest) throws UserException {
@@ -39,11 +44,10 @@ public class UserService {
                     .setAge(userRequest.getAge());
 
             user = userRepository.save(user);
-            UserDto userDtoResponse = UserMapper.toUserDto(user);
 
-            MatrixIdentityDto matrixIdentityDto = restTemplateService.createIdentityInMatrix(user.getId());
-            userDtoResponse.setMatrixIdentity(matrixIdentityDto);
-            return  userDtoResponse;
+            UserDto userDto = UserMapper.toUserDto(user);
+            getAdditionalData(userDto, user.getId());
+            return userDto;
         }
         log.warn("user duplicated");
         throw new UserException("user duplicated");
@@ -55,7 +59,9 @@ public class UserService {
             user.setEmail(userRequest.getEmail())
                     .setFirstName(userRequest.getFirstName())
                     .setLastName(userRequest.getLastName());
-            return UserMapper.toUserDto(userRepository.save(user));
+            UserDto userDto =  UserMapper.toUserDto(userRepository.save(user));
+            getAdditionalData(userDto, user.getId());
+            return userDto;
         }
         log.warn("user notFound");
         throw new UserException("notFound");
@@ -69,9 +75,7 @@ public class UserService {
             UserDto userDto;
             for (User user : userList) {
                 userDto = UserMapper.toUserDto(user);
-                MatrixIdentityDto matrixIdentityDto = restTemplateService.getIdentityInMatrix(user.getId());
-                userDto.setMatrixIdentity(matrixIdentityDto);
-
+                getAdditionalData(userDto, user.getId());
                 result.add(userDto);
             }
         }
@@ -85,10 +89,7 @@ public class UserService {
             throw new UserException("notFound");
         }
         UserDto userDto = UserMapper.toUserDto(user);
-
-        MatrixIdentityDto matrixIdentityDto = restTemplateService.getIdentityInMatrix(user.getId());
-        userDto.setMatrixIdentity(matrixIdentityDto);
-
+        getAdditionalData(userDto, user.getId());
         return userDto;
     }
 
@@ -99,5 +100,12 @@ public class UserService {
             throw new UserException("notFound");
         }
         userRepository.delete(user);
+    }
+
+    private void getAdditionalData(UserDto userDto, String userId) {
+        TokenMatrix tokenMatrix = tokenMatrixService.findByUserId(userId);
+        userDto.setTokenMatrix(tokenMatrix.getToken());
+        MatrixIdentityDto matrixIdentityDto = restTemplateService.getIdentityInMatrix(userId);
+        userDto.setMatrixIdentity(matrixIdentityDto);
     }
 }

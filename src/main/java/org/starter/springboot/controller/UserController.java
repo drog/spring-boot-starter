@@ -6,8 +6,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.starter.springboot.dto.response.UserDto;
 import org.starter.springboot.dto.request.UserRequest;
+import org.starter.springboot.dto.response.UserDto;
 import org.starter.springboot.exception.UserException;
 import org.starter.springboot.service.UserService;
 
