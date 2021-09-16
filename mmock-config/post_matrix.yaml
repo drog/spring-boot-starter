@@ -1,0 +1,15 @@
+request:
+  method: POST
+  path: "/identitymatrix/"
+response:
+  statusCode: 202
+  headers:
+    Content-Type:
+    - application/json
+  body: '{
+  "firstName": "{{fake.FirstName}}",
+  "LastName": "{{fake.LastName}}",
+  "phone": "{{fake.Phone}}",
+  "nick": "{{fake.UserName}}",
+  "age": "{{fake.DigitsN(2)}}"
+  }'  

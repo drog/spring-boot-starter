@@ -1,0 +1,15 @@
+request:
+  method: GET
+  path: "/identitymatrix/:id"
+response:
+  statusCode: 200
+  headers:
+    Content-Type:
+    - application/json
+  body: '{
+  "firstName": "{{fake.FirstName}}",
+  "LastName": "{{fake.LastName}}",
+  "phone": "{{fake.Phone}}",
+  "nick": "{{fake.UserName}}",
+  "age": "{{fake.DigitsN(2)}}"
+  }'

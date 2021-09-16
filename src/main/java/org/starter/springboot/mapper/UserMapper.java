@@ -1,7 +1,7 @@
 package org.starter.springboot.mapper;
 
 import org.modelmapper.ModelMapper;
-import org.starter.springboot.dto.entity.UserDto;
+import org.starter.springboot.dto.response.UserDto;
 import org.starter.springboot.entity.User;
 
 import java.util.List;

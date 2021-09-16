@@ -6,10 +6,9 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.starter.springboot.dto.entity.UserDto;
-import org.starter.springboot.entity.User;
+import org.starter.springboot.dto.response.UserDto;
+import org.starter.springboot.dto.request.UserRequest;
 import org.starter.springboot.exception.UserException;
-import org.starter.springboot.mapper.UserMapper;
 import org.starter.springboot.service.UserService;
 
 import javax.validation.Valid;
@@ -28,10 +27,10 @@ public class UserController {
     @PostMapping()
     @ApiOperation(value = "Create an user", notes = "the email is unique")
     @ApiResponses(value = { @ApiResponse(code = 409, message = "Conflict", response = String.class)})
-    public ResponseEntity<UserDto> create(@RequestBody @Valid UserDto userDto) {
+    public ResponseEntity<UserDto> create(@RequestBody @Valid UserRequest userRequest) {
         try {
-            User user = userService.createUser(userDto);
-            return new ResponseEntity<>(UserMapper.toUserDto(user), HttpStatus.OK);
+            UserDto userDto = userService.createUser(userRequest);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
         } catch (UserException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -42,8 +41,8 @@ public class UserController {
     @ApiOperation(value = "find an user by email")
     public ResponseEntity<UserDto> findByEmail(@PathVariable String email) {
         try {
-            User user = userService.findUserByEmail(email);
-            return new ResponseEntity<>(UserMapper.toUserDto(user), HttpStatus.OK);
+            UserDto userDto = userService.findUserByEmail(email);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
         } catch (UserException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -52,8 +51,8 @@ public class UserController {
     @GetMapping()
     @ApiOperation(value = "find all users")
     public ResponseEntity<List<UserDto>> findAll() {
-        List<User> users = userService.findAll();
-        return new ResponseEntity<>(UserMapper.toUserDtoList(users), HttpStatus.OK);
+        List<UserDto> users = userService.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{email}")
@@ -69,10 +68,10 @@ public class UserController {
 
     @PutMapping
     @ApiOperation(value = "update an user")
-    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserRequest userRequest) {
         try {
-            User user = userService.updateUser(userDto);
-            return new ResponseEntity<>(UserMapper.toUserDto(user), HttpStatus.OK);
+            UserDto userDto = userService.updateUser(userRequest);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
         } catch (UserException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
