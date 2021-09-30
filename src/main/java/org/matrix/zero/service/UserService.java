@@ -46,7 +46,7 @@ public class UserService {
             user = userRepository.save(user);
 
             UserDto userDto = UserMapper.toUserDto(user);
-            getAdditionalData(userDto, user.getId());
+            createAdditionalData(userDto, user.getId());
             return userDto;
         }
         log.warn("user duplicated");
@@ -108,6 +108,15 @@ public class UserService {
             userDto.setTokenMatrix(tokenMatrix.getToken());
         }
         MatrixIdentityDto matrixIdentityDto = restTemplateService.getIdentityInMatrix(userId);
+        userDto.setMatrixIdentity(matrixIdentityDto);
+    }
+
+    private void createAdditionalData(UserDto userDto, String userId) {
+        TokenMatrix tokenMatrix = tokenMatrixService.createByUserId(userId);
+        if( tokenMatrix != null ) {
+            userDto.setTokenMatrix(tokenMatrix.getToken());
+        }
+        MatrixIdentityDto matrixIdentityDto = restTemplateService.createIdentityInMatrix(userId);
         userDto.setMatrixIdentity(matrixIdentityDto);
     }
 }

@@ -4,6 +4,7 @@ Starter project which contains examples with:
 * Calling external api with RestTemplate
 * Store cache in Redis
 * MongoDB
+* Coverage with jacoco > 80% lines covered required
 * Swagger
 
 # Swagger documentation
@@ -19,7 +20,6 @@ Starter project which contains examples with:
 
 # Basic Diagram
 ![Basic Diagram](./docs/basic_diagram.png)
-
 
 # TODO
 - functional test
