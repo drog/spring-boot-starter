@@ -8,8 +8,8 @@
 		<version>2.5.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.starter</groupId>
-	<artifactId>springboot</artifactId>
+	<groupId>org.matrix</groupId>
+	<artifactId>zero</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring boot starter</name>
 	<description>Demo project for Spring Boot</description>

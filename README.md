@@ -1,5 +1,10 @@
 # spring boot starter
-Starter project with spring boot
+Starter project which contains examples with:
+* Basic Rest CRUD examples
+* Calling external api with RestTemplate
+* Store cache in Redis
+* MongoDB
+* Swagger
 
 # Swagger documentation
 - http://localhost:8080/swagger-ui/index.html
@@ -10,7 +15,11 @@ Starter project with spring boot
 - docker-compose
 
 # Start
-- start local mongodb instance with `docker-compose up`
+- Start local mongodb, redis and mmock with `docker-compose up`
+
+# Basic Diagram
+![Basic Diagram](./docs/basic_diagram.png)
+
 
 # TODO
 - functional test
