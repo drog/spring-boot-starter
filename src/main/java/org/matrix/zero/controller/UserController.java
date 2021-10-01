@@ -3,13 +3,13 @@ package org.matrix.zero.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.matrix.zero.dto.request.UserRequest;
 import org.matrix.zero.dto.response.UserDto;
 import org.matrix.zero.exception.UserException;
 import org.matrix.zero.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.matrix.zero.dto.request.UserRequest;
 
 import javax.validation.Valid;
 import java.util.List;

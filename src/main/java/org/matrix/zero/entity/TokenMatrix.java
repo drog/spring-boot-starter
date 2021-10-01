@@ -3,21 +3,24 @@ package org.matrix.zero.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-@Document(collection = "token_matrix")
+@Entity
+@Table(name = "token_matrix")
 public class TokenMatrix implements Serializable {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private Long id;
 
     private String token;
 
-    private String userId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

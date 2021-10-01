@@ -3,7 +3,7 @@ Starter project which contains examples with:
 * Basic Rest CRUD examples
 * Calling external api with RestTemplate
 * Store cache in Redis
-* MongoDB
+* PostgreSQL
 * Coverage with jacoco > 80% lines covered required
 * Swagger
 
@@ -16,7 +16,7 @@ Starter project which contains examples with:
 - docker-compose
 
 # Start
-- Start local mongodb, redis and mmock with `docker-compose up`
+- Start local postgreSQL, redis and mmock with `docker-compose up`
 
 # Basic Diagram
 ![Basic Diagram](./docs/basic_diagram.png)

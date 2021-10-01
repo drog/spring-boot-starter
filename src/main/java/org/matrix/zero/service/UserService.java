@@ -1,8 +1,6 @@
 package org.matrix.zero.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.matrix.zero.dto.external.MatrixIdentityDto;
 import org.matrix.zero.dto.request.UserRequest;
 import org.matrix.zero.dto.response.UserDto;
@@ -12,6 +10,8 @@ import org.matrix.zero.exception.UserException;
 import org.matrix.zero.mapper.UserMapper;
 import org.matrix.zero.repository.UserRepository;
 import org.matrix.zero.utils.RestTemplateService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class UserService {
             user = userRepository.save(user);
 
             UserDto userDto = UserMapper.toUserDto(user);
-            createAdditionalData(userDto, user.getId());
+            createAdditionalData(userDto, user);
             return userDto;
         }
         log.warn("user duplicated");
@@ -102,7 +102,7 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    private void getAdditionalData(UserDto userDto, String userId) {
+    private void getAdditionalData(UserDto userDto, Long userId) {
         TokenMatrix tokenMatrix = tokenMatrixService.findByUserId(userId);
         if( tokenMatrix != null ) {
             userDto.setTokenMatrix(tokenMatrix.getToken());
@@ -111,12 +111,12 @@ public class UserService {
         userDto.setMatrixIdentity(matrixIdentityDto);
     }
 
-    private void createAdditionalData(UserDto userDto, String userId) {
-        TokenMatrix tokenMatrix = tokenMatrixService.createByUserId(userId);
+    private void createAdditionalData(UserDto userDto, User user) {
+        TokenMatrix tokenMatrix = tokenMatrixService.createByUser(user);
         if( tokenMatrix != null ) {
             userDto.setTokenMatrix(tokenMatrix.getToken());
         }
-        MatrixIdentityDto matrixIdentityDto = restTemplateService.createIdentityInMatrix(userId);
+        MatrixIdentityDto matrixIdentityDto = restTemplateService.createIdentityInMatrix(user.getId());
         userDto.setMatrixIdentity(matrixIdentityDto);
     }
 }

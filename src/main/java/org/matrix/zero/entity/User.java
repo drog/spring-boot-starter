@@ -3,20 +3,24 @@ package org.matrix.zero.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-@Document(collection = "user")
-public class User {
+@Entity
+@Table(name = "user_matrix")
+public class User implements Serializable {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private Long id;
 
-    @Indexed(unique = true)
     private String email;
 
     private String firstName;
