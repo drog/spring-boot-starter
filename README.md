@@ -22,7 +22,7 @@ Starter project which contains examples with:
 ![Basic Diagram](./docs/basic_diagram.png)
 
 # TODO
-- functional test
+- fix test with redis
 
 # External links
 - Monster Mock https://github.com/jmartin82/mmock
