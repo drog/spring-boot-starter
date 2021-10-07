@@ -3,6 +3,7 @@ package org.matrix.zero.service;
 import lombok.extern.slf4j.Slf4j;
 import org.matrix.zero.dto.external.MatrixIdentityDto;
 import org.matrix.zero.dto.request.UserRequest;
+import org.matrix.zero.dto.response.PaginatedResponseDto;
 import org.matrix.zero.dto.response.UserDto;
 import org.matrix.zero.entity.TokenMatrix;
 import org.matrix.zero.entity.User;
@@ -10,6 +11,8 @@ import org.matrix.zero.exception.UserException;
 import org.matrix.zero.mapper.UserMapper;
 import org.matrix.zero.repository.UserRepository;
 import org.matrix.zero.utils.RestTemplateService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -67,17 +70,22 @@ public class UserService {
         throw new UserException("notFound");
     }
 
-    public List<UserDto> findAll() {
-        List<UserDto> result = new ArrayList<>();
-
-        List<User> userList = userRepository.findAll();
-        if(!CollectionUtils.isEmpty(userList)) {
+    public PaginatedResponseDto<UserDto> findAll(PageRequest pageRequest) {
+        PaginatedResponseDto<UserDto> result = new PaginatedResponseDto<>();
+        Page<User> userList = userRepository.findAll(pageRequest);
+        result.setTotal(userList.getTotalElements());
+        result.setTotalPages(userList.getTotalPages());
+        result.setPage(pageRequest.getPageNumber());
+        result.setPerPage(pageRequest.getPageSize());
+        if(!CollectionUtils.isEmpty(userList.getContent())) {
+            List<UserDto> userDtoList = new ArrayList<>();
             UserDto userDto;
             for (User user : userList) {
                 userDto = UserMapper.toUserDto(user);
                 getAdditionalData(userDto, user.getId());
-                result.add(userDto);
+                userDtoList.add(userDto);
             }
+            result.setRegisters(userDtoList);
         }
         return result;
     }

@@ -2,6 +2,7 @@ package org.matrix.zero.controller;
 
 import org.junit.jupiter.api.Test;
 import org.matrix.zero.dto.request.UserRequest;
+import org.matrix.zero.dto.response.PaginatedResponseDto;
 import org.matrix.zero.dto.response.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,8 +38,8 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testFindUsersByEmail() {
-        ResponseEntity<List> response = this.restTemplate.getForEntity(createURLWithPort("/users"), List.class);
+    public void testFindAllUsers() {
+        ResponseEntity<PaginatedResponseDto> response = this.restTemplate.getForEntity(createURLWithPort("/users?page=0&size=5"), PaginatedResponseDto.class);
     }
 
     @Test

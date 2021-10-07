@@ -4,15 +4,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.matrix.zero.dto.request.UserRequest;
+import org.matrix.zero.dto.response.PaginatedResponseDto;
 import org.matrix.zero.dto.response.UserDto;
 import org.matrix.zero.exception.UserException;
 import org.matrix.zero.service.UserService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -50,8 +51,9 @@ public class UserController {
 
     @GetMapping()
     @ApiOperation(value = "find all users")
-    public ResponseEntity<List<UserDto>> findAll() {
-        List<UserDto> users = userService.findAll();
+    public ResponseEntity<PaginatedResponseDto<UserDto>> findAll(@RequestParam("page") int page,
+                                                                 @RequestParam("size") int size) {
+        PaginatedResponseDto<UserDto> users = userService.findAll(PageRequest.of(page, size));
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
