@@ -9,6 +9,7 @@ Starter project which contains examples with:
 
 # Swagger documentation
 - http://localhost:8080/swagger-ui/index.html
+- put https://raw.githubusercontent.com/drog/spring-boot-starter/master/docs/swagger-api-docs.json in https://editor.swagger.io/
 
 # Pre requisites
 - java 11
@@ -22,7 +23,7 @@ Starter project which contains examples with:
 ![Basic Diagram](./docs/basic_diagram.png)
 
 # TODO
-- fix test with redis
+- fix test with redis in redis-implementation branch
 
 # External links
 - Monster Mock https://github.com/jmartin82/mmock
