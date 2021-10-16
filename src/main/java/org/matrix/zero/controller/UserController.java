@@ -1,8 +1,6 @@
 package org.matrix.zero.controller;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.matrix.zero.dto.request.UserRequest;
 import org.matrix.zero.dto.response.PaginatedResponseDto;
 import org.matrix.zero.dto.response.UserDto;
@@ -26,6 +24,7 @@ public class UserController {
     }
 
     @PostMapping()
+    @ApiImplicitParam(name = "x-country", value = "x-country", required = true, paramType = "header", dataTypeClass = String.class, example = "CL")
     @ApiOperation(value = "Create an user", notes = "the email is unique")
     @ApiResponses(value = { @ApiResponse(code = 409, message = "Conflict", response = String.class)})
     public ResponseEntity<UserDto> create(@RequestBody @Valid UserRequest userRequest) {
@@ -39,6 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
+    @ApiImplicitParam(name = "x-country", value = "x-country", required = true, paramType = "header", dataTypeClass = String.class, example = "CL")
     @ApiOperation(value = "find an user by email")
     public ResponseEntity<UserDto> findByEmail(@PathVariable String email) {
         try {
@@ -50,6 +50,7 @@ public class UserController {
     }
 
     @GetMapping()
+    @ApiImplicitParam(name = "x-country", value = "x-country", required = true, paramType = "header", dataTypeClass = String.class, example = "CL")
     @ApiOperation(value = "find all users")
     public ResponseEntity<PaginatedResponseDto<UserDto>> findAll(@RequestParam("page") int page,
                                                                  @RequestParam("size") int size) {
@@ -58,6 +59,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{email}")
+    @ApiImplicitParam(name = "x-country", value = "x-country", required = true, paramType = "header", dataTypeClass = String.class, example = "CL")
     @ApiOperation(value = "delete a user")
     public ResponseEntity<Void> deleteUserByEmail(@PathVariable String email) {
         try {
@@ -69,6 +71,7 @@ public class UserController {
     }
 
     @PutMapping
+    @ApiImplicitParam(name = "x-country", value = "x-country", required = true, paramType = "header", dataTypeClass = String.class, example = "CL")
     @ApiOperation(value = "update an user")
     public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserRequest userRequest) {
         try {

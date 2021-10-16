@@ -29,3 +29,4 @@ Starter project which contains examples with:
 - Monster Mock https://github.com/jmartin82/mmock
 - https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/
 - Jpa auditing https://springbootdev.com/2018/03/13/spring-data-jpa-auditing-with-createdby-createddate-lastmodifiedby-and-lastmodifieddate/
+- Swagger headers https://stackoverflow.com/questions/40801442/add-a-header-parameter-in-swagger-ui-documentation-with-springfox

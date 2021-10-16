@@ -43,6 +43,8 @@ public class UserControllerTest {
 
     private MockRestServiceServer mockServer;
 
+    private HttpHeaders headers = new HttpHeaders();
+
     @BeforeEach
     public void init(){
         mockServer = MockRestServiceServer.createServer(this.restTemplate);
@@ -64,6 +66,8 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(asJsonString(matrixIdentityDto))
                 );
+
+        headers.set("x-country", "CL");
     }
 
     @Test
@@ -75,14 +79,16 @@ public class UserControllerTest {
     @Test
     public void testFindOneUserByEmail() {
         createUser("test2@email.org", "John", "Smith", 29);
-        ResponseEntity<UserDto> response = this.restTemplateTest.getForEntity(createURLWithPort("/users/test2@email.org"), UserDto.class);
+        HttpEntity<UserRequest> request = new HttpEntity<>( headers);
+        ResponseEntity<UserDto> response = this.restTemplateTest.exchange(createURLWithPort("/users/test2@email.org"),HttpMethod.GET, request, UserDto.class);
         Assertions.assertTrue(HttpStatus.OK.equals(response.getStatusCode()));
     }
 
     @Test
     public void testFindAllUsers() {
         createUser("test3@email.org", "John", "Smith", 29);
-        ResponseEntity<PaginatedResponseDto> response = this.restTemplateTest.getForEntity(createURLWithPort("/users?page=0&size=5"), PaginatedResponseDto.class);
+        HttpEntity<UserRequest> request = new HttpEntity<>( headers);
+        ResponseEntity<PaginatedResponseDto> response = this.restTemplateTest.exchange(createURLWithPort("/users?page=0&size=5"),HttpMethod.GET, request, PaginatedResponseDto.class);
         System.out.println(response);
         Assertions.assertTrue(HttpStatus.OK.equals(response.getStatusCode()));
     }
@@ -91,7 +97,7 @@ public class UserControllerTest {
     public void testUpdateUser() {
         createUser("test5@email.org", "John", "Smith", 29);
         UserRequest userRequest = new UserRequest("test5@email.org", "John", "Smith", 20);
-        HttpEntity<UserRequest> request = new HttpEntity<>(userRequest);
+        HttpEntity<UserRequest> request = new HttpEntity<>(userRequest, headers);
         ResponseEntity<UserDto> response = this.restTemplateTest.exchange(createURLWithPort("/users"), HttpMethod.PUT, request, UserDto.class);
         Assertions.assertTrue(HttpStatus.OK.equals(response.getStatusCode()));
     }
@@ -104,7 +110,7 @@ public class UserControllerTest {
 
     private ResponseEntity<UserDto> createUser(String email, String firstName, String lastName, Integer age) {
         UserRequest userRequest = new UserRequest(email, firstName, lastName, age);
-        HttpEntity<UserRequest> request = new HttpEntity<>(userRequest);
+        HttpEntity<UserRequest> request = new HttpEntity<>(userRequest, headers);
         return this.restTemplateTest.postForEntity(createURLWithPort("/users"), request, UserDto.class);
     }
 
