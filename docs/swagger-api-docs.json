@@ -48,6 +48,14 @@
             "required": true,
             "type": "integer",
             "format": "int32"
+          },
+          {
+            "name": "x-country",
+            "in": "header",
+            "description": "x-country",
+            "required": true,
+            "type": "string",
+            "x-example": "CL"
           }
         ],
         "responses": {
@@ -90,6 +98,14 @@
             "schema": {
               "$ref": "#/definitions/UserRequest"
             }
+          },
+          {
+            "name": "x-country",
+            "in": "header",
+            "description": "x-country",
+            "required": true,
+            "type": "string",
+            "x-example": "CL"
           }
         ],
         "responses": {
@@ -137,6 +153,14 @@
             "schema": {
               "$ref": "#/definitions/UserRequest"
             }
+          },
+          {
+            "name": "x-country",
+            "in": "header",
+            "description": "x-country",
+            "required": true,
+            "type": "string",
+            "x-example": "CL"
           }
         ],
         "responses": {
@@ -178,6 +202,14 @@
             "description": "email",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "x-country",
+            "in": "header",
+            "description": "x-country",
+            "required": true,
+            "type": "string",
+            "x-example": "CL"
           }
         ],
         "responses": {
@@ -214,6 +246,14 @@
             "description": "email",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "x-country",
+            "in": "header",
+            "description": "x-country",
+            "required": true,
+            "type": "string",
+            "x-example": "CL"
           }
         ],
         "responses": {
