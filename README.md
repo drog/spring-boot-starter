@@ -2,7 +2,6 @@
 Starter project which contains examples with:
 * Basic Rest CRUD examples
 * Calling external api with RestTemplate
-* Store cache in Redis
 * PostgreSQL
 * Coverage with jacoco > 80% lines covered required
 * Swagger
