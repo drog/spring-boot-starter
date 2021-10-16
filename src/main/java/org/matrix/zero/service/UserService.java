@@ -85,7 +85,7 @@ public class UserService {
                 getAdditionalData(userDto, user.getId());
                 userDtoList.add(userDto);
             }
-            result.setRegisters(userDtoList);
+            result.setData(userDtoList);
         }
         return result;
     }
