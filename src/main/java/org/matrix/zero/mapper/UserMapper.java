@@ -14,11 +14,4 @@ public class UserMapper {
     public static UserDto toUserDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }
-
-    public static List<UserDto> toUserDtoList(List<User> userList) {
-        return userList
-                .stream()
-                .map(user -> modelMapper.map(user, UserDto.class))
-                .collect(Collectors.toList());
-    }
 }

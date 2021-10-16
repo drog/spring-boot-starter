@@ -13,7 +13,11 @@ public class RestTemplateService {
     @Value("${server.matrix.url}")
     private String matrixUrl;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public RestTemplateService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public MatrixIdentityDto getIdentityInMatrix(Long userId) {
         ResponseEntity<MatrixIdentityDto> response = restTemplate.getForEntity(matrixUrl + "identitymatrix/" + userId, MatrixIdentityDto.class);
