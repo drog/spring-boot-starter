@@ -12,12 +12,13 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @Entity
 @Table(name = "token_matrix")
-public class TokenMatrix implements Serializable {
+public class TokenMatrix extends AbstractEntity implements Serializable {
 
     @Id
     @GeneratedValue
     private Long id;
 
+    @Column(name = "token")
     private String token;
 
     @OneToOne(cascade = CascadeType.ALL)
