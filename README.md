@@ -6,6 +6,8 @@ Starter project which contains examples with:
 * PostgreSQL
 * Coverage with jacoco > 80% lines covered required
 * Swagger
+* headers and spring boot filters
+* jpa auditing
 
 # Swagger documentation
 - http://localhost:8080/swagger-ui/index.html
