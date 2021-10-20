@@ -18,13 +18,16 @@ Starter project which contains examples with:
 - docker-compose
 
 # Start
-- Start local postgreSQL, redis and mmock with `docker-compose up`
+- Start local postgreSQL and mmock with `docker-compose up`
 
 # Basic Diagram
 ![Basic Diagram](./docs/basic_diagram.png)
 
 # TODO
 - fix test with redis in redis-implementation branch
+- add Sonar in docker-compose
+- generate random id
+- check if meets twelve factor https://12factor.net/
 
 # External links
 - Monster Mock https://github.com/jmartin82/mmock
