@@ -4,9 +4,6 @@ import org.matrix.zero.dto.response.UserDto;
 import org.matrix.zero.entity.User;
 import org.modelmapper.ModelMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class UserMapper {
 
     private static ModelMapper modelMapper = new ModelMapper();

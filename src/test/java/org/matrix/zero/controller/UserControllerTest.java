@@ -21,7 +21,8 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 
@@ -77,11 +78,38 @@ public class UserControllerTest {
     }
 
     @Test
+    public void testCreateDuplicated() {
+        ResponseEntity<UserDto> response = createUser("test9@email.org", "John", "Smith", 29);
+        ResponseEntity<UserDto> response2 = createUser("test9@email.org", "John", "Smith", 29);
+        Assertions.assertTrue(HttpStatus.OK.equals(response.getStatusCode()));
+        Assertions.assertTrue(HttpStatus.CONFLICT.equals(response2.getStatusCode()));
+    }
+
+    @Test
+    public void testCreateUserWrongEmail() {
+        ResponseEntity<UserDto> response = createUser("wrongEmail", "John", "Smith", 29);
+        Assertions.assertTrue(HttpStatus.BAD_REQUEST.equals(response.getStatusCode()));
+    }
+
+    @Test
+    public void testCreateUserEmptyEmail() {
+        ResponseEntity<UserDto> response = createUser(null, "John", "Smith", 29);
+        Assertions.assertTrue(HttpStatus.BAD_REQUEST.equals(response.getStatusCode()));
+    }
+
+    @Test
     public void testFindOneUserByEmail() {
         createUser("test2@email.org", "John", "Smith", 29);
         HttpEntity<UserRequest> request = new HttpEntity<>( headers);
         ResponseEntity<UserDto> response = this.restTemplateTest.exchange(createURLWithPort("/users/test2@email.org"),HttpMethod.GET, request, UserDto.class);
         Assertions.assertTrue(HttpStatus.OK.equals(response.getStatusCode()));
+    }
+
+    @Test
+    public void testFindOneUserNotFoundByEmail() {
+        HttpEntity<UserRequest> request = new HttpEntity<>( headers);
+        ResponseEntity<UserDto> response = this.restTemplateTest.exchange(createURLWithPort("/users/emailNotFound@email.org"),HttpMethod.GET, request, UserDto.class);
+        Assertions.assertTrue(HttpStatus.NO_CONTENT.equals(response.getStatusCode()));
     }
 
     @Test
@@ -103,9 +131,24 @@ public class UserControllerTest {
     }
 
     @Test
+    public void testUpdateUserNotFound() {
+        UserRequest userRequest = new UserRequest("emailNotFound@email.org", "John", "Smith", 20);
+        HttpEntity<UserRequest> request = new HttpEntity<>(userRequest, headers);
+        ResponseEntity<UserDto> response = this.restTemplateTest.exchange(createURLWithPort("/users"), HttpMethod.PUT, request, UserDto.class);
+        Assertions.assertTrue(HttpStatus.NO_CONTENT.equals(response.getStatusCode()));
+    }
+
+    @Test
     public void testDeleteUser() {
         createUser("test4@email.org", "John", "Smith", 29);
-        this.restTemplateTest.delete(createURLWithPort("/users/test4@email.org"));
+        HttpEntity<UserRequest> request = new HttpEntity<>(headers);
+        this.restTemplateTest.exchange(createURLWithPort("/users/test4@email.org"), HttpMethod.DELETE, request, Void.class);
+    }
+
+    @Test
+    public void testDeleteUserNotFound() {
+        HttpEntity<UserRequest> request = new HttpEntity<>(headers);
+        this.restTemplateTest.exchange(createURLWithPort("/users/emailNotFound@email.org"), HttpMethod.DELETE, request, Void.class);
     }
 
     private ResponseEntity<UserDto> createUser(String email, String firstName, String lastName, Integer age) {

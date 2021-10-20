@@ -1,6 +1,9 @@
 package org.matrix.zero.controller;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.matrix.zero.dto.request.UserRequest;
 import org.matrix.zero.dto.response.PaginatedResponseDto;
 import org.matrix.zero.dto.response.UserDto;
@@ -34,7 +37,6 @@ public class UserController {
         } catch (UserException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-
     }
 
     @GetMapping("/{email}")
