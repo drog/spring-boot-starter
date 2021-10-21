@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class TokenUtils {
 
+    private TokenUtils() {}
+
     public static String generateToken() {
         StringBuilder sb = new StringBuilder();
         MessageDigest md;

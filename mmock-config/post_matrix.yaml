@@ -8,7 +8,7 @@ response:
     - application/json
   body: '{
   "firstName": "{{fake.FirstName}}",
-  "LastName": "{{fake.LastName}}",
+  "lastName": "{{fake.LastName}}",
   "phone": "{{fake.Phone}}",
   "nick": "{{fake.UserName}}",
   "age": "{{fake.DigitsN(2)}}"

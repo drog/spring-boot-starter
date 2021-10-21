@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -29,4 +30,7 @@ public class User extends AbstractEntity implements Serializable  {
 
     @Column(name = "age")
     private Integer age;
+
+    @OneToMany(mappedBy="user", fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+    private Set<TokenMatrix> tokenMatrixSet;
 }

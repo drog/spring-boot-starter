@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TokenMatrixRepository extends JpaRepository<TokenMatrix, Long> {
-
-    TokenMatrix findByUserId(Long userId);
 }

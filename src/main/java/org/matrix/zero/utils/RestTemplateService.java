@@ -1,6 +1,7 @@
 package org.matrix.zero.utils;
 
 import org.matrix.zero.dto.external.MatrixIdentityDto;
+import org.matrix.zero.dto.external.MatrixIdentityRequestDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +20,17 @@ public class RestTemplateService {
         this.restTemplate = restTemplate;
     }
 
-    public MatrixIdentityDto getIdentityInMatrix(Long userId) {
-        ResponseEntity<MatrixIdentityDto> response = restTemplate.getForEntity(matrixUrl + "identitymatrix/" + userId, MatrixIdentityDto.class);
+    public MatrixIdentityDto getIdentityInMatrix(Long userId, String token) {
+        ResponseEntity<MatrixIdentityDto> response = restTemplate.getForEntity(matrixUrl + "identitymatrix/" + userId + "/token/" + token, MatrixIdentityDto.class);
         if( response.getStatusCode().is2xxSuccessful() ) {
             return response.getBody();
         }
         return null;
     }
 
-    public MatrixIdentityDto createIdentityInMatrix(Long id) {
-        HttpEntity<Long> request = new HttpEntity<>(id);
+
+    public MatrixIdentityDto createIdentityInMatrix(Long userId, String token) {
+        HttpEntity<MatrixIdentityRequestDto> request = new HttpEntity<>(new MatrixIdentityRequestDto(userId, token));
         ResponseEntity<MatrixIdentityDto> response = restTemplate.postForEntity(matrixUrl + "identitymatrix/", request, MatrixIdentityDto.class);
         if( response.getStatusCode().is2xxSuccessful() ) {
             return response.getBody();

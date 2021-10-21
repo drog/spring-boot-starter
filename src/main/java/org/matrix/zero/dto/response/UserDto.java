@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.matrix.zero.dto.external.MatrixIdentityDto;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
@@ -23,9 +25,5 @@ public class UserDto {
     @ApiModelProperty(example = "37")
     private Integer age;
 
-    @ApiModelProperty(example = "d41d8cd98f00b204e9800998ecf8427e")
-    private String tokenMatrix;
-
-    private MatrixIdentityDto matrixIdentity;
-
+    private List<MatrixIdentityDto> matrixIdentities;
 }

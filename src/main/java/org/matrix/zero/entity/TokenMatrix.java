@@ -1,7 +1,9 @@
 package org.matrix.zero.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = { "user"})
+@ToString(exclude = { "user"})
 @Accessors(chain = true)
 @Entity
 @Table(name = "token_matrix")
@@ -21,7 +25,7 @@ public class TokenMatrix extends AbstractEntity implements Serializable {
     @Column(name = "token")
     private String token;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable=false)
     private User user;
 }

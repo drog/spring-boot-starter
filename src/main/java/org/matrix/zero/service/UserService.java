@@ -10,6 +10,7 @@ import org.matrix.zero.entity.User;
 import org.matrix.zero.exception.UserException;
 import org.matrix.zero.mapper.UserMapper;
 import org.matrix.zero.repository.UserRepository;
+import org.matrix.zero.utils.RandomNumberUtils;
 import org.matrix.zero.utils.RestTemplateService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -63,7 +65,7 @@ public class UserService {
                     .setFirstName(userRequest.getFirstName())
                     .setLastName(userRequest.getLastName());
             UserDto userDto =  UserMapper.toUserDto(userRepository.save(user));
-            getAdditionalData(userDto, user.getId());
+            getAdditionalData(userDto, user.getId(), user.getTokenMatrixSet());
             return userDto;
         }
         log.warn("user notFound");
@@ -71,23 +73,21 @@ public class UserService {
     }
 
     public PaginatedResponseDto<UserDto> findAll(PageRequest pageRequest) {
-        PaginatedResponseDto<UserDto> result = new PaginatedResponseDto<>();
         Page<User> userList = userRepository.findAll(pageRequest);
-        result.setTotal(userList.getTotalElements());
-        result.setTotalPages(userList.getTotalPages());
-        result.setPage(pageRequest.getPageNumber());
-        result.setPerPage(pageRequest.getPageSize());
+        List<UserDto> userDtoList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(userList.getContent())) {
-            List<UserDto> userDtoList = new ArrayList<>();
             UserDto userDto;
             for (User user : userList) {
                 userDto = UserMapper.toUserDto(user);
-                getAdditionalData(userDto, user.getId());
+                getAdditionalData(userDto, user.getId(), user.getTokenMatrixSet());
                 userDtoList.add(userDto);
             }
-            result.setData(userDtoList);
         }
-        return result;
+        return new PaginatedResponseDto<>(userList.getTotalElements(),
+                userList.getTotalPages(),
+                pageRequest.getPageNumber(),
+                pageRequest.getPageSize(),
+                userDtoList);
     }
 
     public UserDto findUserByEmail(String email) throws UserException {
@@ -97,7 +97,7 @@ public class UserService {
             throw new UserException("notFound");
         }
         UserDto userDto = UserMapper.toUserDto(user);
-        getAdditionalData(userDto, user.getId());
+        getAdditionalData(userDto, user.getId(), user.getTokenMatrixSet());
         return userDto;
     }
 
@@ -110,21 +110,30 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    private void getAdditionalData(UserDto userDto, Long userId) {
-        TokenMatrix tokenMatrix = tokenMatrixService.findByUserId(userId);
-        if( tokenMatrix != null ) {
-            userDto.setTokenMatrix(tokenMatrix.getToken());
+    private void getAdditionalData(UserDto userDto, Long userId, Set<TokenMatrix> tokenMatrixSet) {
+        List<MatrixIdentityDto> matrixIdentities = new ArrayList<>();
+        if( !CollectionUtils.isEmpty(tokenMatrixSet) ) {
+            for (TokenMatrix tokenMatrix : tokenMatrixSet) {
+                MatrixIdentityDto matrixIdentityDto = restTemplateService.getIdentityInMatrix(userId, tokenMatrix.getToken());
+                matrixIdentityDto.setTokenMatrix(tokenMatrix.getToken());
+                matrixIdentities.add(matrixIdentityDto);
+            }
         }
-        MatrixIdentityDto matrixIdentityDto = restTemplateService.getIdentityInMatrix(userId);
-        userDto.setMatrixIdentity(matrixIdentityDto);
+        userDto.setMatrixIdentities(matrixIdentities);
     }
 
     private void createAdditionalData(UserDto userDto, User user) {
-        TokenMatrix tokenMatrix = tokenMatrixService.createByUser(user);
-        if( tokenMatrix != null ) {
-            userDto.setTokenMatrix(tokenMatrix.getToken());
+
+        List<MatrixIdentityDto> matrixIdentities = new ArrayList<>();
+        int numberIdentities = RandomNumberUtils.generateRandomNumberBetween();
+        for (int i = 0; i <= numberIdentities; i++) {
+            TokenMatrix tokenMatrix = tokenMatrixService.createByUser(user);
+            if( tokenMatrix != null ) {
+                MatrixIdentityDto matrixIdentityDto = restTemplateService.createIdentityInMatrix(user.getId(), tokenMatrix.getToken());
+                matrixIdentityDto.setTokenMatrix(tokenMatrix.getToken());
+                matrixIdentities.add(matrixIdentityDto);
+            }
         }
-        MatrixIdentityDto matrixIdentityDto = restTemplateService.createIdentityInMatrix(user.getId());
-        userDto.setMatrixIdentity(matrixIdentityDto);
+        userDto.setMatrixIdentities(matrixIdentities);
     }
 }

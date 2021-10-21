@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MatrixIdentityDto {
 
+    @ApiModelProperty(example = "d41d8cd98f00b204e9800998ecf8427e")
+    private String tokenMatrix;
+
     @ApiModelProperty(example = "Thomas")
     private String firstName;
 

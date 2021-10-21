@@ -17,10 +17,6 @@ public class TokenMatrixService {
         this.tokenMatrixRepository = tokenMatrixRepository;
     }
 
-    public TokenMatrix findByUserId(Long userId) {
-        return tokenMatrixRepository.findByUserId(userId);
-    }
-
     public TokenMatrix createByUser(User user) {
         TokenMatrix tokenMatrix = new TokenMatrix();
         tokenMatrix.setUser(user);
