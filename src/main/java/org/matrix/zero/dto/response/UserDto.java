@@ -25,5 +25,8 @@ public class UserDto {
     @ApiModelProperty(example = "37")
     private Integer age;
 
+    @ApiModelProperty(example = "CL")
+    private String country;
+
     private List<MatrixIdentityDto> matrixIdentities;
 }

@@ -1,6 +1,7 @@
 package org.matrix.zero.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.matrix.zero.config.filter.TenantProvider;
 import org.matrix.zero.dto.external.MatrixIdentityDto;
 import org.matrix.zero.dto.request.UserRequest;
 import org.matrix.zero.dto.response.PaginatedResponseDto;
@@ -31,12 +32,16 @@ public class UserService {
 
     private final TokenMatrixService tokenMatrixService;
 
+    private final TenantProvider tenantProvider;
+
     public UserService(UserRepository userRepository,
                        RestTemplateService restTemplateService,
-                       TokenMatrixService tokenMatrixService) {
+                       TokenMatrixService tokenMatrixService,
+                       TenantProvider tenantProvider) {
         this.userRepository = userRepository;
         this.restTemplateService = restTemplateService;
         this.tokenMatrixService = tokenMatrixService;
+        this.tenantProvider = tenantProvider;
     }
 
     public UserDto createUser(UserRequest userRequest) throws UserException {
@@ -46,7 +51,8 @@ public class UserService {
                     .setEmail(userRequest.getEmail())
                     .setFirstName(userRequest.getFirstName())
                     .setLastName(userRequest.getLastName())
-                    .setAge(userRequest.getAge());
+                    .setAge(userRequest.getAge())
+                    .setCountry(tenantProvider.getTenant());
 
             user = userRepository.save(user);
 

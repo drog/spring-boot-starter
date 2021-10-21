@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Set;
 
 @Data
@@ -13,7 +12,7 @@ import java.util.Set;
 @Accessors(chain = true)
 @Entity
 @Table(name = "user_matrix")
-public class User extends AbstractEntity implements Serializable  {
+public class User extends AbstractEntity {
 
     @Id
     @GeneratedValue
@@ -30,6 +29,9 @@ public class User extends AbstractEntity implements Serializable  {
 
     @Column(name = "age")
     private Integer age;
+
+    @Column(name = "country")
+    private String country;
 
     @OneToMany(mappedBy="user", fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
     private Set<TokenMatrix> tokenMatrixSet;

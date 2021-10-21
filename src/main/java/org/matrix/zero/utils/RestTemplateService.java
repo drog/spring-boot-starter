@@ -21,7 +21,15 @@ public class RestTemplateService {
     }
 
     public MatrixIdentityDto getIdentityInMatrix(Long userId, String token) {
-        ResponseEntity<MatrixIdentityDto> response = restTemplate.getForEntity(matrixUrl + "identitymatrix/" + userId + "/token/" + token, MatrixIdentityDto.class);
+        String url = new StringBuilder()
+                .append(matrixUrl)
+                .append("identitymatrix/")
+                .append(userId)
+                .append("/token/")
+                .append(token)
+                .toString();
+
+        ResponseEntity<MatrixIdentityDto> response = restTemplate.getForEntity(url, MatrixIdentityDto.class);
         if( response.getStatusCode().is2xxSuccessful() ) {
             return response.getBody();
         }

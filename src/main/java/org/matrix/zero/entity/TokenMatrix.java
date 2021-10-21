@@ -7,7 +7,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +15,7 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @Entity
 @Table(name = "token_matrix")
-public class TokenMatrix extends AbstractEntity implements Serializable {
+public class TokenMatrix extends AbstractEntity {
 
     @Id
     @GeneratedValue
